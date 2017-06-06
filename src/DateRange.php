@@ -20,42 +20,6 @@ class DateRange {
 		$this->to = $to;
 	}
 
-	/**
-	 * @internal
-	 * @param array|DateRange $range
-	 * @return static
-     * @throw \InvalidArgumentException
-	 */
-	public static function wrap($range) {
-		if ($range instanceof DateRange) {
-			return $range;
-		}
-
-		if (
-		    is_array($range)
-            &&
-            array_key_exists('from', $range)
-            &&
-            array_key_exists('to', $range)
-        ) {
-		    return new DateRange($range['from'], $range['to']);
-        }
-
-        if (
-            is_array($range)
-            &&
-            count($range) === 2
-            &&
-            array_key_exists(0, $range)
-            &&
-            array_key_exists(1, $range)
-        ) {
-            return new DateRange($range[0], $range[1]);
-        }
-
-		throw new \InvalidArgumentException('Expected array with from and to or exactly 2 items');
-	}
-
     /**
      * @return \DateTime|NULL
      */
@@ -83,6 +47,10 @@ class DateRange {
         ];
     }
 
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
     public function includes(\DateTime $date)
     {
         if ($this->from && $this->to) {
@@ -94,5 +62,76 @@ class DateRange {
         }
 
         return TRUE;
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return static|NULL
+     */
+    public function intersect($b)
+    {
+        $a = $this;
+        $b = static::wrap($b);
+
+        if (!$a->overlaps($b)) {
+            return NULL;
+        }
+
+        $from = max($a->from, $b->from);
+        $to = min($a->to, $b->to) ?: max($a->to, $b->to);
+
+        return new static($from, $to);
+    }
+
+    /**
+     * @internal
+     * @param array|DateRange $range
+     * @return static
+     * @throw \InvalidArgumentException
+     */
+    public static function wrap($range)
+    {
+        if ($range instanceof DateRange) {
+            return $range;
+        }
+
+        if (
+            is_array($range)
+            &&
+            array_key_exists('from', $range)
+            &&
+            array_key_exists('to', $range)
+        ) {
+            return new DateRange($range['from'], $range['to']);
+        }
+
+        if (
+            is_array($range)
+            &&
+            count($range) === 2
+            &&
+            array_key_exists(0, $range)
+            &&
+            array_key_exists(1, $range)
+        ) {
+            return new DateRange($range[0], $range[1]);
+        }
+
+        throw new \InvalidArgumentException('Expected array with from and to or exactly 2 items');
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return bool
+     */
+    public function overlaps($b)
+    {
+        $a = $this;
+        $b = static::wrap($b);
+
+        return
+            (!$a->from || !$b->to || $a->from <= $b->to)
+            &&
+            (!$a->to || !$b->from || $a->to >= $b->from);
     }
 }
