@@ -134,4 +134,53 @@ class DateRange {
             &&
             (!$a->to || !$b->from || $a->to >= $b->from);
     }
+
+    /**
+     * @param array|DateRange $b
+     * @return static|NULL
+     */
+    public function join($b)
+    {
+        $a = $this;
+        $b = static::wrap($b);
+
+        if (!$a->overlaps($b) && !$a->isRightAfter($b) && !$a->isRightBefore($b)) {
+            return NULL;
+        }
+
+        $from = min($a->from, $b->from);
+        $to = (!$a->to || !$b->to) ? NULL : max($a->to, $b->to);
+
+        return new static($from, $to);
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return bool
+     */
+    public function isRightAfter($b)
+    {
+        $a = $this;
+        $b = static::wrap($b);
+
+        return
+            $b->to
+            &&
+            $a->from
+            &&
+            (
+                (clone $b->to)
+                    ->modify('midnight, +1 day')
+                    ->format('Y-m-d') === $a->from->format('Y-m-d')
+            );
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return bool
+     */
+    public function isRightBefore($b)
+    {
+        return static::wrap($b)->isRightAfter($this);
+    }
 }
