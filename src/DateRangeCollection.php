@@ -23,18 +23,32 @@ class DateRangeCollection {
             $toA = $a->getTo();
             $toB = $b->getTo();
 
-            // ASC by from (NULL first)
-            if ($fromA < $fromB) {
+            // by from (NULL first)
+            if (!$fromA && $fromB) {
                 return -1;
-            } else if ($fromA > $fromB) {
+            } else if ($fromA && !$fromB) {
                 return 1;
+            } else if ($fromA && $fromB) {
+                // ASC by from
+                if ($fromA < $fromB) {
+                    return -1;
+                } else if ($fromA > $fromB) {
+                    return 1;
+                }
             }
 
-            // ASC by to (NULL last)
-            if (($toA && $toB) ? $toA < $toB : $toA > $toB) {
-                return -1;
-            } else if (($toA && $toB) ? $toA > $toB : $toA < $toB) {
+            // by to (NULL last)
+            if (!$toA && $toB) {
                 return 1;
+            } else if ($toA && !$toB) {
+                return -1;
+            } else if ($toA && $toB) {
+                // ASC by to
+                if ($toA < $toB) {
+                    return -1;
+                } else if ($toA > $toB) {
+                    return 1;
+                }
             }
 
             return 0;
