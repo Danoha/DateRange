@@ -48,23 +48,6 @@ class DateRange {
     }
 
     /**
-     * @param \DateTime $date
-     * @return bool
-     */
-    public function includes(\DateTime $date)
-    {
-        if ($this->from && $this->to) {
-            return $date >= $this->from && $date <= $this->to;
-        } else if ($this->from && !$this->to) {
-            return $date >= $this->from;
-        } else if (!$this->from && $this->to) {
-            return $date <= $this->to;
-        }
-
-        return TRUE;
-    }
-
-    /**
      * @param array|DateRange $b
      * @return static|NULL
      */
@@ -182,5 +165,101 @@ class DateRange {
     public function isRightBefore($b)
     {
         return static::wrap($b)->isRightAfter($this);
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return DateRangeCollection
+     */
+    public function subtract($b)
+    {
+        $b = static::wrap($b);
+
+        if (!$this->overlaps($b)) {
+            return new DateRangeCollection([new static($this->from, $this->to),]);
+        }
+
+        if ($b->includes($this)) {
+            return new DateRangeCollection([]);
+        }
+
+        if ($this->from != $b->from && $this->to != $b->to && $this->includes($b)) {
+            // two results
+            return new DateRangeCollection([
+                new static($this->from, (clone $b->from)->modify('-1 day')),
+                new static((clone $b->to)->modify('+1 day'), $this->to),
+            ]);
+        }
+
+        if (
+            ($b->from && $this->includes($b->from))
+            ||
+            ($this->to && $b->includes($this->to))
+        ) {
+            $from = $this->from;
+            $to = (clone $b->from)->modify('-1 day');
+        } else {
+            $from = (clone $b->to)->modify('+1 day');
+            $to = $this->to;
+        }
+
+        return new DateRangeCollection([new static($from, $to),]);
+    }
+
+    /**
+     * @param \DateTime|array|DateRange $dateOrRange
+     * @return bool
+     */
+    public function includes($dateOrRange)
+    {
+        if ($dateOrRange instanceof \DateTime) {
+            return $this->includesDate($dateOrRange);
+        } else {
+            return $this->includesRange($dateOrRange);
+        }
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function includesDate(\DateTime $date)
+    {
+        if ($this->from && $this->to) {
+            return $date >= $this->from && $date <= $this->to;
+        } else if ($this->from && !$this->to) {
+            return $date >= $this->from;
+        } else if (!$this->from && $this->to) {
+            return $date <= $this->to;
+        }
+
+        return TRUE;
+    }
+
+    /**
+     * @param array|DateRange $range
+     * @return bool
+     */
+    public function includesRange($range)
+    {
+        $range = static::wrap($range);
+
+        if ($this->equals($range)) {
+            return TRUE;
+        }
+
+        $includesFrom = !$this->from || ($range->from && $this->from <= $range->from);
+        $includesTo = !$this->to || ($range->to && $this->to >= $range->to);
+        return $includesFrom && $includesTo;
+    }
+
+    /**
+     * @param array|DateRange $b
+     * @return bool
+     */
+    public function equals($b)
+    {
+        $b = static::wrap($b);
+        return $this->from == $b->from && $this->to == $b->to;
     }
 }

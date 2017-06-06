@@ -11,3 +11,6 @@ $coll2 = [
     [ 'from' => $from, 'to' => NULL, ],
 ];
 Assert::same($coll2, (new \Danoha\DateRangeCollection($coll2))->unwrap());
+
+$coll3 = new \Danoha\DateRangeCollection([]);
+Assert::same($coll3, \Danoha\DateRangeCollection::wrap($coll3));
