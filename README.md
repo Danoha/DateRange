@@ -51,6 +51,7 @@ contain both added ranges.
 
 - unwrap - get underlying date ranges in common format,
 - add - add given ranges to collection,
-- includes - tests if collection includes given date,
+- includes - tests if collection includes given date or range,
 - join - joins ranges in current collection if possible,
-- intersect - calculates all intersections with given ranges.
+- intersect - calculates all intersections with given ranges,
+- subtract - subtracts given ranges from current collection.

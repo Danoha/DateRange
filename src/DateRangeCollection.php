@@ -79,13 +79,13 @@ class DateRangeCollection {
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTime|array|DateRange $dateOrRange
      * @return bool
      */
-    public function includes(\DateTime $date)
+    public function includes($dateOrRange)
     {
         foreach ($this->ranges as $range) {
-            if ($range->includes($date)) {
+            if ($range->includes($dateOrRange)) {
                 return TRUE;
             }
         }
@@ -156,4 +156,26 @@ class DateRangeCollection {
 
         return new static(array_filter($ranges));
 	}
+
+    /**
+     * @param array|DateRangeCollection $subtrahends
+     * @return static
+     */
+    public function subtract($subtrahends)
+    {
+        $minuends = $this->ranges;
+        $subtrahends = static::wrap($subtrahends)->ranges;
+
+        foreach ($subtrahends as $subtrahend) {
+            $offset = 0;
+            /** @var DateRange $minuend */
+            foreach (array_slice($minuends, 0) as $i => $minuend) {
+                $differences = $minuend->subtract($subtrahend);
+                array_splice($minuends, $offset + $i, 1, $differences->ranges);
+                $offset += count($differences->ranges) - 1;
+            }
+        }
+
+        return new static($minuends);
+    }
 }
