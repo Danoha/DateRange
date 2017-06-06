@@ -10,6 +10,7 @@ class DateRangeCollection {
 
 	/**
 	 * @param array $collection
+     * @throws \InvalidArgumentException
 	 */
 	public function __construct($collection) {
 		foreach ($collection as $item) {
@@ -21,6 +22,7 @@ class DateRangeCollection {
 	 * @internal
 	 * @param array|DateRangeCollection $collection
 	 * @return static
+     * @throws \InvalidArgumentException
 	 */
 	public static function wrap($collection) {
 		if ($collection instanceof DateRangeCollection) {
@@ -30,8 +32,16 @@ class DateRangeCollection {
 		return new static($collection);
 	}
 
+    /**
+     * @return array
+     */
+    public function unwrap() {
+        return array_map(function (DateRange $range) {
+            return $range->unwrap();
+        }, $this->ranges);
+	}
+
 	public function intersect($collection) {
-		$collection = static::wrap($collection);
 
 
 	}
