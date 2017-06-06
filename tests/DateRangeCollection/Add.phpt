@@ -20,6 +20,6 @@ Assert::same([
 ], $coll->unwrap());
 
 Assert::same([
-    ['from' => $from, 'to' => NULL,],
     ['from' => NULL, 'to' => $to,],
+    ['from' => $from, 'to' => NULL,],
 ], $coll2->unwrap());

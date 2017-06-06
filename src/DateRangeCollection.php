@@ -6,7 +6,7 @@ namespace Danoha;
 class DateRangeCollection {
 
 	/** @var DateRange[] */
-	protected $ranges;
+    protected $ranges = [];
 
 	/**
 	 * @param array $collection
@@ -16,6 +16,29 @@ class DateRangeCollection {
 		foreach ($collection as $item) {
 			$this->ranges[] = DateRange::wrap($item);
 		}
+
+        usort($this->ranges, function (DateRange $a, DateRange $b) {
+            $fromA = $a->getFrom();
+            $fromB = $b->getFrom();
+            $toA = $a->getTo();
+            $toB = $b->getTo();
+
+            // ASC by from (NULL first)
+            if ($fromA < $fromB) {
+                return -1;
+            } else if ($fromA > $fromB) {
+                return 1;
+            }
+
+            // ASC by to (NULL last)
+            if (($toA && $toB) ? $toA < $toB : $toA > $toB) {
+                return -1;
+            } else if (($toA && $toB) ? $toA > $toB : $toA < $toB) {
+                return 1;
+            }
+
+            return 0;
+        });
 	}
 
 	/**
@@ -70,8 +93,27 @@ class DateRangeCollection {
         return FALSE;
     }
 
-	public function intersect($collection) {
+    public function join()
+    {
+        $ranges = $this->ranges;
 
+        for ($i = 0; $i < count($ranges); $i++) {
+            $a = $ranges[$i];
 
+            foreach (array_slice($ranges, 0) as $j => $b) {
+                if ($i === $j) {
+                    continue;
+                }
+
+                $join = $a->join($b);
+
+                if ($join) {
+                    $ranges[$i] = $a = $join;
+                    array_splice($ranges, $j, 1);
+                }
+            }
+        }
+
+        return new static(array_filter($ranges));
 	}
 }
