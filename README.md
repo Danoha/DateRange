@@ -46,7 +46,7 @@ Note: definite intervals are handled as inclusive on both sides.
 
 Note: all methods returning collection return new instance.
 That means calling `$coll->add($range)` twice on the same
-collection will create two instances on neither of them will
+collection will create two instances and neither of them will
 contain both added ranges.
 
 - unwrap - get underlying date ranges in common format,
