@@ -55,6 +55,21 @@ class DateRangeCollection {
         );
     }
 
+    /**
+     * @param \DateTime $date
+     * @return bool
+     */
+    public function includes(\DateTime $date)
+    {
+        foreach ($this->ranges as $range) {
+            if ($range->includes($date)) {
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
 	public function intersect($collection) {
 
 

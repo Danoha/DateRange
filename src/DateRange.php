@@ -21,30 +21,6 @@ class DateRange {
 	}
 
 	/**
-	 * @return \DateTime|NULL
-	 */
-	public function getFrom() {
-		return $this->from;
-	}
-
-	/**
-	 * @return \DateTime|NULL
-	 */
-	public function getTo() {
-		return $this->to;
-	}
-
-    /**
-     * @return array
-     */
-    public function unwrap() {
-        return [
-            'from' => $this->getFrom(),
-            'to' => $this->getTo(),
-        ];
-	}
-
-	/**
 	 * @internal
 	 * @param array|DateRange $range
 	 * @return static
@@ -79,4 +55,44 @@ class DateRange {
 
 		throw new \InvalidArgumentException('Expected array with from and to or exactly 2 items');
 	}
+
+    /**
+     * @return \DateTime|NULL
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * @return \DateTime|NULL
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * @return array
+     */
+    public function unwrap()
+    {
+        return [
+            'from' => $this->from,
+            'to' => $this->to,
+        ];
+    }
+
+    public function includes(\DateTime $date)
+    {
+        if ($this->from && $this->to) {
+            return $date >= $this->from && $date <= $this->to;
+        } else if ($this->from && !$this->to) {
+            return $date >= $this->from;
+        } else if (!$this->from && $this->to) {
+            return $date <= $this->to;
+        }
+
+        return TRUE;
+    }
 }

@@ -50,4 +50,5 @@ collection will create two instances on neither of them will
 contain both added ranges.
 
 - unwrap - get underlying date ranges in common format,
-- add - add given ranges to collection.
+- add - add given ranges to collection,
+- includes - includes given date.
