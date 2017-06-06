@@ -41,20 +41,6 @@ class DateRangeCollection {
         });
 	}
 
-	/**
-	 * @internal
-	 * @param array|DateRangeCollection $collection
-	 * @return static
-     * @throws \InvalidArgumentException
-	 */
-	public static function wrap($collection) {
-		if ($collection instanceof DateRangeCollection) {
-			return $collection;
-		}
-
-		return new static($collection);
-	}
-
     /**
      * @return array
      */
@@ -93,6 +79,46 @@ class DateRangeCollection {
         return FALSE;
     }
 
+    /**
+     * @param array|DateRangeCollection $coll
+     * @return static
+     */
+    public function intersect($coll)
+    {
+        $left = $this->ranges;
+        $right = static::wrap($coll)->ranges;
+
+        $ranges = [];
+        foreach ($left as $leftRange) {
+            foreach ($right as $rightRange) {
+                $intersection = $leftRange->intersect($rightRange);
+                if ($intersection) {
+                    $ranges[] = $intersection;
+                }
+            }
+        }
+
+        return (new static($ranges))->join();
+    }
+
+    /**
+     * @internal
+     * @param array|DateRangeCollection $collection
+     * @return static
+     * @throws \InvalidArgumentException
+     */
+    public static function wrap($collection)
+    {
+        if ($collection instanceof DateRangeCollection) {
+            return $collection;
+        }
+
+        return new static($collection);
+    }
+
+    /**
+     * @return static
+     */
     public function join()
     {
         $ranges = $this->ranges;
