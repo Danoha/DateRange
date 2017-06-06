@@ -41,6 +41,20 @@ class DateRangeCollection {
         }, $this->ranges);
 	}
 
+    /**
+     * @param array $ranges
+     * @return static
+     */
+    public function add(array $ranges)
+    {
+        return new static(
+            array_merge(
+                $this->ranges,
+                $ranges
+            )
+        );
+    }
+
 	public function intersect($collection) {
 
 
