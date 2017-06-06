@@ -48,7 +48,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return static|NULL
      */
     public function intersect($b)
@@ -68,13 +68,13 @@ class DateRange {
 
     /**
      * @internal
-     * @param array|DateRange $range
+     * @param array|self $range
      * @return static
      * @throw \InvalidArgumentException
      */
     public static function wrap($range)
     {
-        if ($range instanceof DateRange) {
+        if ($range instanceof self) {
             return $range;
         }
 
@@ -85,7 +85,7 @@ class DateRange {
             &&
             array_key_exists('to', $range)
         ) {
-            return new DateRange($range['from'], $range['to']);
+            return new static($range['from'], $range['to']);
         }
 
         if (
@@ -97,14 +97,14 @@ class DateRange {
             &&
             array_key_exists(1, $range)
         ) {
-            return new DateRange($range[0], $range[1]);
+            return new static($range[0], $range[1]);
         }
 
         throw new \InvalidArgumentException('Expected array with from and to or exactly 2 items');
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return bool
      */
     public function overlaps($b)
@@ -119,7 +119,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return static|NULL
      */
     public function join($b)
@@ -138,7 +138,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return bool
      */
     public function isRightAfter($b)
@@ -159,7 +159,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return bool
      */
     public function isRightBefore($b)
@@ -168,7 +168,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return DateRangeCollection
      */
     public function subtract($b)
@@ -207,7 +207,7 @@ class DateRange {
     }
 
     /**
-     * @param \DateTime|array|DateRange $dateOrRange
+     * @param \DateTime|array|self $dateOrRange
      * @return bool
      */
     public function includes($dateOrRange)
@@ -237,7 +237,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $range
+     * @param array|self $range
      * @return bool
      */
     public function includesRange($range)
@@ -254,7 +254,7 @@ class DateRange {
     }
 
     /**
-     * @param array|DateRange $b
+     * @param array|self $b
      * @return bool
      */
     public function equals($b)

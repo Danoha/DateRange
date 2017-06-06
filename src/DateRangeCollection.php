@@ -94,7 +94,7 @@ class DateRangeCollection {
     }
 
     /**
-     * @param array|DateRangeCollection $coll
+     * @param array|self $coll
      * @return static
      */
     public function intersect($coll)
@@ -117,13 +117,13 @@ class DateRangeCollection {
 
     /**
      * @internal
-     * @param array|DateRangeCollection $collection
+     * @param array|self $collection
      * @return static
      * @throws \InvalidArgumentException
      */
     public static function wrap($collection)
     {
-        if ($collection instanceof DateRangeCollection) {
+        if ($collection instanceof self) {
             return $collection;
         }
 
@@ -158,7 +158,7 @@ class DateRangeCollection {
 	}
 
     /**
-     * @param array|DateRangeCollection $subtrahends
+     * @param array|self $subtrahends
      * @return static
      */
     public function subtract($subtrahends)
