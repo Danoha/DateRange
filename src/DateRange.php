@@ -2,23 +2,24 @@
 
 namespace Danoha;
 
-class DateRange {
+class DateRange
+{
 
-	/** @var \DateTime|NULL */
-	protected $from;
+    /** @var \DateTime|NULL */
+    protected $from;
 
-	/** @var \DateTime|NULL */
-	protected $to;
+    /** @var \DateTime|NULL */
+    protected $to;
 
-	/**
-	 * @param \DateTime|NULL $from
-	 * @param \DateTime|NULL $to
-	 */
+    /**
+     * @param \DateTime|NULL $from
+     * @param \DateTime|NULL $to
+     */
     public function __construct(\DateTime $from = NULL, \DateTime $to = NULL)
     {
-		$this->from = $from;
-		$this->to = $to;
-	}
+        $this->from = $from;
+        $this->to = $to;
+    }
 
     /**
      * @return \DateTime|NULL

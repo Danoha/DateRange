@@ -3,19 +3,21 @@
 namespace Danoha;
 
 
-class DateRangeCollection {
+class DateRangeCollection
+{
 
-	/** @var DateRange[] */
+    /** @var DateRange[] */
     protected $ranges = [];
 
-	/**
-	 * @param array $collection
+    /**
+     * @param array $collection
      * @throws \InvalidArgumentException
-	 */
-	public function __construct($collection) {
-		foreach ($collection as $item) {
-			$this->ranges[] = DateRange::wrap($item);
-		}
+     */
+    public function __construct($collection)
+    {
+        foreach ($collection as $item) {
+            $this->ranges[] = DateRange::wrap($item);
+        }
 
         usort($this->ranges, function (DateRange $a, DateRange $b) {
             $fromA = $a->getFrom();
@@ -53,16 +55,17 @@ class DateRangeCollection {
 
             return 0;
         });
-	}
+    }
 
     /**
      * @return array
      */
-    public function unwrap() {
+    public function unwrap()
+    {
         return array_map(function (DateRange $range) {
             return $range->unwrap();
         }, $this->ranges);
-	}
+    }
 
     /**
      * @return DateRange[]
@@ -168,7 +171,7 @@ class DateRangeCollection {
         }
 
         return new static(array_filter($ranges));
-	}
+    }
 
     /**
      * @param array|self $subtrahends
