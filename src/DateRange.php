@@ -193,9 +193,9 @@ class DateRange
         }
 
         if (
-            ($b->from && $this->includes($b->from))
+            ($b->from && $this->from != $b->from && $this->includes($b->from))
             ||
-            ($this->to && $b->includes($this->to))
+            ($this->to && $this->to != $b->to && $b->includes($this->to))
         ) {
             $from = $this->from;
             $to = (clone $b->from)->modify('-1 day');
