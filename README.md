@@ -46,7 +46,8 @@ $coll->unwrap() === [
 ];
 ```
 
-Every method accepts collection or array of ranges:
+Every method that accepts collection also accepts
+array of ranges (which can be arrays, too):
 
 ```php
 $coll->intersect(
