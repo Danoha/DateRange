@@ -2,6 +2,20 @@
 
 __Working with date ranges made easy.__
 
+## Installation
+
+Works best with composer. :ok_hand:
+
+```bash
+composer require danoha/date-range
+```
+
+If you do not use composer or its autoloading, require
+`src/DateRange.php` and `src/DateRangeCollection.php`.
+
+Then use `\Danoha\DateRange` and `\Danoha\DateRangeCollection` classes
+directly in your code.
+
 ## Usage
 
 Working with date range:
