@@ -4,9 +4,19 @@ __Working with date ranges made easy.__
 
 ## Usage
 
-Create date range collection:
+Working with date range:
 
+```php
+$range = new \Danoha\DateRange($from, $to); // any parameter can be NULL
+$range
+    ->join($thatRange)
+    ->intersect([ $from, $to ]) // methods accepting range also accept array
+    ->contains($currentDate);
 ```
+
+Work with date range collection:
+
+```php
 $coll = new \Danoha\DateRangeCollection([
     [ $from, $to ], // two items per range accepted
     [ 'from' => $from, 'to' => $to, ], // accepted too
@@ -14,21 +24,31 @@ $coll = new \Danoha\DateRangeCollection([
     [ $from, NULL, ], // NULL means indefinite interval
     [ NULL, NULL, ], // and can be used on both sides
 ]);
+
+$coll
+    ->join($thatCollection)
+    ->intersect([ $range1, $range2 ]) // methods accepting collection also accept array
+    ->contains($someRange);
 ```
 
 To get your ranges back:
 
-```
+```php
+$coll->getRanges() === [
+    new \Danoha\DateRange($from, $to),
+    new \Danoha\DateRange($from, NULL),
+];
+
 $coll->unwrap() === [
     [ 'from' => $from, 'to' => $to, ], // every range has this exact format
-    [ 'from' => $from, 'to' => $to, ], // regardless of what was passed to constructor
+    [ 'from' => $from, 'to' => NULL, ], // regardless of what was passed to constructor
     ...
-]
+];
 ```
 
 Every method accepts collection or array of ranges:
 
-```
+```php
 $coll->intersect(
     // another collection
     new \Danoha\DateRangeCollection([ ... ])
