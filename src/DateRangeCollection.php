@@ -139,11 +139,16 @@ class DateRangeCollection {
     }
 
     /**
+     * @param array|self $collection
      * @return static
      */
-    public function join()
+    public function join($collection = NULL)
     {
         $ranges = $this->ranges;
+
+        if ($collection) {
+            $ranges = array_merge($ranges, static::wrap($collection)->ranges);
+        }
 
         for ($i = 0; $i < count($ranges); $i++) {
             $a = $ranges[$i];

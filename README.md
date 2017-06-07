@@ -86,7 +86,7 @@ contain both joined ranges.
 
 - getFrom - returns first date in range,
 - getTo - returns last date in range,
-- unwrap - get range in array format,
+- unwrap - gets range in array format,
 - intersect - finds intersection between current and given range,
 - overlaps - tests if current and given range overlap,
 - join - finds common range between current and given range,
@@ -105,10 +105,10 @@ That means calling `$coll->add(...)` twice on the same
 collection will create two instances and neither of them will
 contain both added ranges.
 
-- getRanges - get ranges in current collection,
-- unwrap - get underlying date ranges in array format,
-- add - add given ranges to collection,
+- getRanges - gets ranges in current collection,
+- unwrap - gets underlying date ranges in array format,
+- add - adds given ranges to collection,
 - includes - tests if collection includes given date or range,
-- join - joins ranges in current collection if possible,
+- join - adds given ranges to current collection and joins ranges in current collection if possible,
 - intersect - calculates all intersections with given ranges,
 - subtract - subtracts given ranges from current collection.
