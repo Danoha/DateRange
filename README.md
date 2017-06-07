@@ -42,14 +42,36 @@ $coll->intersect([
 
 Note: definite intervals are handled as inclusive on both sides.
 
-## Available methods
+## Available range methods
+
+Note: all methods returning range return new instance.
+That means calling `$range->join(...)` twice on the same
+range will create two instances and neither of them will
+contain both joined ranges.
+
+- getFrom - returns first date in range,
+- getTo - returns last date in range,
+- unwrap - get range in array format,
+- intersect - finds intersection between current and given range,
+- overlaps - tests if current and given range overlap,
+- join - finds common range between current and given range,
+- isRightAfter - tests if current range is right after given range,
+- isRightBefore - tests if current range is right before given range,
+- subtract - returns collection of differences between current and given range,
+- includes - tests if range includes given date or range,
+- includesDate - tests if range includes given date,
+- includesRange - tests if range includes given range,
+- equals - tests if current range is equal to given range.
+
+## Available collection methods
 
 Note: all methods returning collection return new instance.
-That means calling `$coll->add($range)` twice on the same
+That means calling `$coll->add(...)` twice on the same
 collection will create two instances and neither of them will
 contain both added ranges.
 
-- unwrap - get underlying date ranges in common format,
+- getRanges - get ranges in current collection,
+- unwrap - get underlying date ranges in array format,
 - add - add given ranges to collection,
 - includes - tests if collection includes given date or range,
 - join - joins ranges in current collection if possible,

@@ -65,6 +65,14 @@ class DateRangeCollection {
 	}
 
     /**
+     * @return DateRange[]
+     */
+    public function getRanges()
+    {
+        return $this->ranges;
+    }
+
+    /**
      * @param array $ranges
      * @return static
      */

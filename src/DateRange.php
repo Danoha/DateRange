@@ -11,11 +11,11 @@ class DateRange {
 	protected $to;
 
 	/**
-	 * @internal
 	 * @param \DateTime|NULL $from
 	 * @param \DateTime|NULL $to
 	 */
-	protected function __construct(\DateTime $from = NULL, \DateTime $to = NULL) {
+    public function __construct(\DateTime $from = NULL, \DateTime $to = NULL)
+    {
 		$this->from = $from;
 		$this->to = $to;
 	}
