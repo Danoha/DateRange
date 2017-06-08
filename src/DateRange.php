@@ -263,4 +263,50 @@ class DateRange
         $b = static::wrap($b);
         return $this->from == $b->from && $this->to == $b->to;
     }
+
+    /**
+     * @param array|self $a
+     * @param array|self $b
+     * @return int
+     */
+    public static function compare($a, $b)
+    {
+        $a = static::wrap($a);
+        $b = static::wrap($b);
+
+        $fromA = $a->getFrom();
+        $fromB = $b->getFrom();
+        $toA = $a->getTo();
+        $toB = $b->getTo();
+
+        // by from (NULL first)
+        if (!$fromA && $fromB) {
+            return -1;
+        } else if ($fromA && !$fromB) {
+            return 1;
+        } else if ($fromA && $fromB) {
+            // ASC by from
+            if ($fromA < $fromB) {
+                return -1;
+            } else if ($fromA > $fromB) {
+                return 1;
+            }
+        }
+
+        // by to (NULL last)
+        if (!$toA && $toB) {
+            return 1;
+        } else if ($toA && !$toB) {
+            return -1;
+        } else if ($toA && $toB) {
+            // ASC by to
+            if ($toA < $toB) {
+                return -1;
+            } else if ($toA > $toB) {
+                return 1;
+            }
+        }
+
+        return 0;
+    }
 }

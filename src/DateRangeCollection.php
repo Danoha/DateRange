@@ -20,40 +20,7 @@ class DateRangeCollection
         }
 
         usort($this->ranges, function (DateRange $a, DateRange $b) {
-            $fromA = $a->getFrom();
-            $fromB = $b->getFrom();
-            $toA = $a->getTo();
-            $toB = $b->getTo();
-
-            // by from (NULL first)
-            if (!$fromA && $fromB) {
-                return -1;
-            } else if ($fromA && !$fromB) {
-                return 1;
-            } else if ($fromA && $fromB) {
-                // ASC by from
-                if ($fromA < $fromB) {
-                    return -1;
-                } else if ($fromA > $fromB) {
-                    return 1;
-                }
-            }
-
-            // by to (NULL last)
-            if (!$toA && $toB) {
-                return 1;
-            } else if ($toA && !$toB) {
-                return -1;
-            } else if ($toA && $toB) {
-                // ASC by to
-                if ($toA < $toB) {
-                    return -1;
-                } else if ($toA > $toB) {
-                    return 1;
-                }
-            }
-
-            return 0;
+            return DateRange::compare($a, $b);
         });
     }
 
